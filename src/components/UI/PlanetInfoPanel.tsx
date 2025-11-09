@@ -13,18 +13,23 @@ const PlanetInfoPanelComponent: React.FC = () => {
   const [currentPlanet, setCurrentPlanet] = useState<PlanetName | null>(null);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
     if (selectedPlanet && !isAnimating) {
       setCurrentPlanet(selectedPlanet as PlanetName);
       setIsVisible(true);
     } else if (!selectedPlanet) {
       setIsVisible(false);
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setCurrentPlanet(null);
       }, 500);
-      return () => {
-        clearTimeout(timer);
-      };
     }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [selectedPlanet, isAnimating]);
 
   if (!currentPlanet) return null;

@@ -38,8 +38,10 @@ export const useCameraAnimation = ({
     duration: number;
   } | null>(null);
 
+  const previousPlanetRef = useRef<string | null>(null);
+
   useEffect(() => {
-    if (selectedPlanet) {
+    if (selectedPlanet && selectedPlanet !== previousPlanetRef.current) {
       const planetData = getPlanetPosition(selectedPlanet);
       if (!planetData) return;
 
@@ -64,7 +66,8 @@ export const useCameraAnimation = ({
       };
 
       setAnimating(true);
-    } else if (!selectedPlanet && animationRef.current !== null) {
+      previousPlanetRef.current = selectedPlanet;
+    } else if (!selectedPlanet && previousPlanetRef.current !== null) {
       const startTarget =
         controlsRef.current?.target.clone() ?? new THREE.Vector3(0, 0, 0);
 
@@ -78,12 +81,13 @@ export const useCameraAnimation = ({
       };
 
       setAnimating(true);
+      previousPlanetRef.current = null;
     }
   }, [
     selectedPlanet,
     getPlanetPosition,
     controlsRef,
-    camera,
+    camera.position,
     defaultCameraPosition,
     defaultCameraTarget,
     setAnimating,

@@ -1,5 +1,5 @@
 // tailwind.config.js
-// Tailwind CSS configuration with custom animations
+// Tailwind CSS configuration with custom animations and scrollbar utilities
 
 /** @type {import('tailwindcss').Config} */
 export default {

@@ -54,7 +54,7 @@ const sceneConfig: SceneConfig = {
   },
   planetarySystem: {
     showOrbits: true,
-    orbitOpacity: 0.08,
+    orbitOpacity: 0.03,
     planets: [
       {
         name: "Mercury",

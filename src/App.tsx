@@ -1,9 +1,12 @@
 // src/App.tsx
-// Main application entry with complete scene configuration
+// Main application entry with complete scene configuration and UI overlay
 
 import { SceneSetup } from "@/components/Scene/SceneSetup";
+import { BackToOverviewButton } from "@/components/UI/BackToOverviewButton";
+import { useCameraStore } from "@/store/cameraStore";
 import type { SceneConfig } from "@/types/scene.types";
 import { Canvas } from "@react-three/fiber";
+import { useEffect } from "react";
 
 const sceneConfig: SceneConfig = {
   starfield: {
@@ -78,68 +81,66 @@ const sceneConfig: SceneConfig = {
       },
       {
         name: "Earth",
-        radius: 2.8,
+        radius: 3,
         orbitalRadius: 40,
         eccentricity: 0.017,
-        axialTilt: 0.41,
-        rotationSpeed: 0.1,
+        axialTilt: 0.408,
+        rotationSpeed: 1.0,
         revolutionSpeed: 0.03,
-        initialAngle: 3.4,
+        initialAngle: 3.1,
         textureUrl: "/textures/8k_earth_daymap.jpg",
-        color: "#4169E1",
-        hasAtmosphere: true,
+        color: "#2F6A9D",
         hasCloudLayer: true,
         cloudTextureUrl: "/textures/8k_earth_clouds.jpg",
-        cloudRotationSpeed: 0.08,
-        cloudOpacity: 0.5,
+        cloudRotationSpeed: 1.05,
+        cloudOpacity: 0.4,
       },
       {
         name: "Mars",
-        radius: 2.0,
-        orbitalRadius: 55,
+        radius: 2,
+        orbitalRadius: 52,
         eccentricity: 0.093,
         axialTilt: 0.44,
-        rotationSpeed: 0.097,
+        rotationSpeed: 0.97,
         revolutionSpeed: 0.024,
-        initialAngle: 4.9,
+        initialAngle: 0.0,
         textureUrl: "/textures/8k_mars.jpg",
         color: "#CD5C5C",
       },
       {
         name: "Jupiter",
         radius: 8,
-        orbitalRadius: 80,
+        orbitalRadius: 95,
         eccentricity: 0.048,
-        axialTilt: 0.05,
-        rotationSpeed: 0.24,
+        axialTilt: 0.055,
+        rotationSpeed: 2.4,
         revolutionSpeed: 0.013,
-        initialAngle: 0.9,
+        initialAngle: 1.3,
         textureUrl: "/textures/8k_jupiter.jpg",
         color: "#DAA520",
-        emissive: "#8B4513",
-        emissiveIntensity: 0.2,
       },
       {
         name: "Saturn",
         radius: 7,
-        orbitalRadius: 110,
-        eccentricity: 0.054,
-        axialTilt: 0.47,
-        rotationSpeed: 0.22,
+        orbitalRadius: 130,
+        eccentricity: 0.056,
+        axialTilt: 0.466,
+        rotationSpeed: 2.2,
         revolutionSpeed: 0.009,
-        initialAngle: 2.5,
+        initialAngle: 5.5,
         textureUrl: "/textures/8k_saturn.jpg",
         color: "#F4A460",
         hasRings: true,
         ringInnerRadius: 8,
         ringOuterRadius: 14,
+        ringTextureUrl: "/textures/8k_saturn_ring_alpha.png",
       },
       {
         name: "Uranus",
-        radius: 4,
-        orbitalRadius: 145,
+        radius: 4.5,
+        orbitalRadius: 160,
         eccentricity: 0.047,
-        axialTilt: 1.71,
+        axialTilt: 1.706,
         rotationSpeed: 0.14,
         revolutionSpeed: 0.007,
         initialAngle: 4.2,
@@ -197,8 +198,24 @@ const sceneConfig: SceneConfig = {
 };
 
 function App() {
+  const { deselectPlanet, selectedPlanet } = useCameraStore();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && selectedPlanet) {
+        deselectPlanet();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [deselectPlanet, selectedPlanet]);
+
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen relative">
       <Canvas
         camera={{ position: [0, 50, 100], fov: 60 }}
         gl={{
@@ -210,6 +227,7 @@ function App() {
       >
         <SceneSetup config={sceneConfig} showHelpers={false} />
       </Canvas>
+      <BackToOverviewButton />
     </div>
   );
 }

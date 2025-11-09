@@ -1,22 +1,24 @@
 // src/components/Scene/Planet.tsx
-// Planet component with orbital mechanics, rotation, and optional cloud layer
+// Planet component with orbital mechanics, rotation, optional cloud layer, and click detection
 
 import type { PlanetConfig } from "@/types/scene.types";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { Group, Mesh } from "three";
 import { SaturnRings } from "./SaturnRings";
 
 interface PlanetProps {
   config: PlanetConfig;
+  onMeshReady?: (name: string, mesh: Mesh) => void;
 }
 
 const PlanetWithTextureAndClouds: React.FC<{
   config: PlanetConfig;
   textureUrl: string;
   cloudTextureUrl: string;
-}> = ({ config, textureUrl, cloudTextureUrl }) => {
+  onMeshReady?: (name: string, mesh: Mesh) => void;
+}> = ({ config, textureUrl, cloudTextureUrl, onMeshReady }) => {
   const groupRef = useRef<Group>(null);
   const meshRef = useRef<Mesh>(null);
   const cloudMeshRef = useRef<Mesh>(null);
@@ -24,6 +26,12 @@ const PlanetWithTextureAndClouds: React.FC<{
 
   const texture = useTexture(textureUrl);
   const cloudTexture = useTexture(cloudTextureUrl);
+
+  useEffect(() => {
+    if (meshRef.current && onMeshReady) {
+      onMeshReady(config.name, meshRef.current);
+    }
+  }, [config.name, onMeshReady]);
 
   useFrame((_state, delta) => {
     timeRef.current += delta;
@@ -85,12 +93,19 @@ const PlanetWithTextureAndClouds: React.FC<{
 const PlanetWithTexture: React.FC<{
   config: PlanetConfig;
   textureUrl: string;
-}> = ({ config, textureUrl }) => {
+  onMeshReady?: (name: string, mesh: Mesh) => void;
+}> = ({ config, textureUrl, onMeshReady }) => {
   const groupRef = useRef<Group>(null);
   const meshRef = useRef<Mesh>(null);
   const timeRef = useRef(0);
 
   const texture = useTexture(textureUrl);
+
+  useEffect(() => {
+    if (meshRef.current && onMeshReady) {
+      onMeshReady(config.name, meshRef.current);
+    }
+  }, [config.name, onMeshReady]);
 
   useFrame((_state, delta) => {
     timeRef.current += delta;
@@ -136,12 +151,19 @@ const PlanetWithTexture: React.FC<{
   );
 };
 
-const PlanetWithoutTexture: React.FC<{ config: PlanetConfig }> = ({
-  config,
-}) => {
+const PlanetWithoutTexture: React.FC<{
+  config: PlanetConfig;
+  onMeshReady?: (name: string, mesh: Mesh) => void;
+}> = ({ config, onMeshReady }) => {
   const groupRef = useRef<Group>(null);
   const meshRef = useRef<Mesh>(null);
   const timeRef = useRef(0);
+
+  useEffect(() => {
+    if (meshRef.current && onMeshReady) {
+      onMeshReady(config.name, meshRef.current);
+    }
+  }, [config.name, onMeshReady]);
 
   useFrame((_state, delta) => {
     timeRef.current += delta;
@@ -187,20 +209,27 @@ const PlanetWithoutTexture: React.FC<{ config: PlanetConfig }> = ({
   );
 };
 
-export const Planet: React.FC<PlanetProps> = ({ config }) => {
+export const Planet: React.FC<PlanetProps> = ({ config, onMeshReady }) => {
   if (config.textureUrl && config.hasCloudLayer && config.cloudTextureUrl) {
     return (
       <PlanetWithTextureAndClouds
         config={config}
         textureUrl={config.textureUrl}
         cloudTextureUrl={config.cloudTextureUrl}
+        onMeshReady={onMeshReady}
       />
     );
   }
 
   if (config.textureUrl) {
-    return <PlanetWithTexture config={config} textureUrl={config.textureUrl} />;
+    return (
+      <PlanetWithTexture
+        config={config}
+        textureUrl={config.textureUrl}
+        onMeshReady={onMeshReady}
+      />
+    );
   }
 
-  return <PlanetWithoutTexture config={config} />;
+  return <PlanetWithoutTexture config={config} onMeshReady={onMeshReady} />;
 };

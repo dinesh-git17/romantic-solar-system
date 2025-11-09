@@ -1,23 +1,19 @@
 // tailwind.config.js
+// Tailwind CSS configuration with custom animations
+
+/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors: {
-        space: {
-          dark: "#000000",
-          starlight: "#ffffff",
-        },
+      animation: {
+        "fade-in": "fadeIn 0.3s ease-in-out",
       },
-      fontFamily: {
-        sans: [
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "sans-serif",
-        ],
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
     },
   },

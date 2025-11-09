@@ -1,6 +1,8 @@
 // src/types/scene.types.ts
 // Type definitions for the 3D solar system scene configuration
 
+import type * as THREE from "three";
+
 export interface StarfieldConfig {
   count: number;
   radius: number;
@@ -131,4 +133,22 @@ export interface SceneConfig {
   helpers: HelperConfig;
   sun: SunConfig;
   planetarySystem: PlanetarySystemConfig;
+}
+
+export interface CameraAnimationState {
+  selectedPlanet: string | null;
+  isAnimating: boolean;
+  defaultCameraPosition: THREE.Vector3;
+  defaultCameraTarget: THREE.Vector3;
+}
+
+export interface PlanetPosition {
+  name: string;
+  position: THREE.Vector3;
+  radius: number;
+}
+
+export interface CameraTransitionConfig {
+  duration: number;
+  easing: (t: number) => number;
 }

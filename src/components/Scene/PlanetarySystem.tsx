@@ -1,9 +1,10 @@
 // src/components/Scene/PlanetarySystem.tsx
-// Manages all planets, asteroid belt, comet, and Saturn particle effects
+// Manages all planets, asteroid belt, comet, Saturn particle effects, and planet mesh refs
 
 import type { PlanetarySystemConfig } from "@/types/scene.types";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
+import type { Mesh } from "three";
 import * as THREE from "three";
 import { AsteroidBelt } from "./AsteroidBelt";
 import { Comet } from "./Comet";
@@ -13,11 +14,30 @@ import { SaturnParticles } from "./SaturnParticles";
 
 interface PlanetarySystemProps {
   config: PlanetarySystemConfig;
+  onPlanetMeshesReady?: (meshes: Map<string, Mesh>) => void;
 }
 
-export const PlanetarySystem: React.FC<PlanetarySystemProps> = ({ config }) => {
+export const PlanetarySystem: React.FC<PlanetarySystemProps> = ({
+  config,
+  onPlanetMeshesReady,
+}) => {
   const saturnPositionRef = useRef(new THREE.Vector3(0, 0, 0));
   const timeRef = useRef(0);
+  const planetMeshesRef = useRef<Map<string, Mesh>>(new Map());
+
+  const handleMeshReady = useCallback(
+    (name: string, mesh: Mesh) => {
+      planetMeshesRef.current.set(name, mesh);
+
+      if (
+        planetMeshesRef.current.size === config.planets.length &&
+        onPlanetMeshesReady
+      ) {
+        onPlanetMeshesReady(planetMeshesRef.current);
+      }
+    },
+    [config.planets.length, onPlanetMeshesReady]
+  );
 
   useFrame((_state, delta) => {
     timeRef.current += delta;
@@ -56,7 +76,7 @@ export const PlanetarySystem: React.FC<PlanetarySystemProps> = ({ config }) => {
               }}
             />
           )}
-          <Planet config={planetConfig} />
+          <Planet config={planetConfig} onMeshReady={handleMeshReady} />
         </group>
       ))}
       {config.asteroidBelt && <AsteroidBelt config={config.asteroidBelt} />}

@@ -1,8 +1,9 @@
 // src/hooks/usePlanetTracking.ts
+// Tracks real-time planet positions for camera targeting and interactions
 
 import type { PlanetConfig, PlanetPosition } from "@/types/scene.types";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import * as THREE from "three";
 
 export const usePlanetTracking = (planets: PlanetConfig[]) => {
@@ -30,9 +31,12 @@ export const usePlanetTracking = (planets: PlanetConfig[]) => {
     });
   });
 
-  const getPlanetPosition = (name: string): PlanetPosition | undefined => {
-    return positionsRef.current.get(name);
-  };
+  const getPlanetPosition = useCallback(
+    (name: string): PlanetPosition | undefined => {
+      return positionsRef.current.get(name);
+    },
+    []
+  );
 
   return { getPlanetPosition };
 };

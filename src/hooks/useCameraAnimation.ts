@@ -1,4 +1,5 @@
 // src/hooks/useCameraAnimation.ts
+// Camera animation system for smooth transitions between overview and planet focus modes
 
 import { useCameraStore } from "@/store/cameraStore";
 import type { PlanetPosition } from "@/types/scene.types";
@@ -80,12 +81,12 @@ export const useCameraAnimation = ({
     }
   }, [
     selectedPlanet,
-    camera,
     getPlanetPosition,
-    setAnimating,
+    controlsRef,
+    camera,
     defaultCameraPosition,
     defaultCameraTarget,
-    controlsRef,
+    setAnimating,
   ]);
 
   const updateAnimation = () => {

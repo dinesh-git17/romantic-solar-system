@@ -1,5 +1,4 @@
 // src/components/Scene/Planet.tsx
-// Planet component with orbital mechanics, rotation, optional cloud layer, and click detection
 
 import type { PlanetConfig } from "@/types/scene.types";
 import { useTexture } from "@react-three/drei";

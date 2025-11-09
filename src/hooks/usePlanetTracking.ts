@@ -1,5 +1,4 @@
 // src/hooks/usePlanetTracking.ts
-// Hook to track real-time positions of all planets
 
 import type { PlanetConfig, PlanetPosition } from "@/types/scene.types";
 import { useFrame } from "@react-three/fiber";

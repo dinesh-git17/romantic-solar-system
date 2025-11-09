@@ -1,5 +1,4 @@
 // src/store/cameraStore.ts
-// Zustand store for camera animation state management
 
 import * as THREE from "three";
 import { create } from "zustand";

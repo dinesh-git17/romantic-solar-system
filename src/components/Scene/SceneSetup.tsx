@@ -1,5 +1,4 @@
 // src/components/Scene/SceneSetup.tsx
-// Main scene composition with camera animation system integration
 
 import { useCameraAnimation } from "@/hooks/useCameraAnimation";
 import { usePlanetClick } from "@/hooks/usePlanetClick";

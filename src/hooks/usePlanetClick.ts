@@ -1,5 +1,4 @@
 // src/hooks/usePlanetClick.ts
-// Hook for raycasting and planet click detection
 
 import { useCameraStore } from "@/store/cameraStore";
 import { useThree } from "@react-three/fiber";

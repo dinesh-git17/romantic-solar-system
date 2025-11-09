@@ -1,5 +1,4 @@
 // src/hooks/useCameraAnimation.ts
-// Hook for smooth camera animation transitions
 
 import { useCameraStore } from "@/store/cameraStore";
 import type { PlanetPosition } from "@/types/scene.types";

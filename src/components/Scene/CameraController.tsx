@@ -1,12 +1,10 @@
 // src/components/Scene/CameraController.tsx
-// Dynamic OrbitControls with camera animation support
 
 import { useCameraStore } from "@/store/cameraStore";
 import type { ControlsConfig } from "@/types/scene.types";
 import { OrbitControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import type { ForwardedRef } from "react";
-import { forwardRef, useEffect } from "react";
+import { forwardRef } from "react";
 import type { Vector3 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
@@ -20,7 +18,7 @@ const CameraControllerComponent = (
   props: CameraControllerProps,
   ref: ForwardedRef<OrbitControlsImpl>
 ) => {
-  const { config, dynamicTarget, planetRadius } = props;
+  const { config, planetRadius } = props;
   const { selectedPlanet, isAnimating } = useCameraStore();
 
   const minDistance = selectedPlanet
@@ -30,34 +28,6 @@ const CameraControllerComponent = (
   const maxDistance = selectedPlanet
     ? (planetRadius ?? 1) * 8
     : config.maxDistance;
-
-  useEffect(() => {
-    if (
-      ref &&
-      typeof ref !== "function" &&
-      ref.current &&
-      dynamicTarget &&
-      !isAnimating &&
-      selectedPlanet
-    ) {
-      ref.current.target.copy(dynamicTarget);
-      ref.current.update();
-    }
-  }, [dynamicTarget, isAnimating, ref, selectedPlanet]);
-
-  useFrame(() => {
-    if (
-      ref &&
-      typeof ref !== "function" &&
-      ref.current &&
-      dynamicTarget &&
-      selectedPlanet &&
-      !isAnimating
-    ) {
-      ref.current.target.copy(dynamicTarget);
-      ref.current.update();
-    }
-  });
 
   return (
     <OrbitControls

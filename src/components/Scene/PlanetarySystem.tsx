@@ -1,5 +1,4 @@
 // src/components/Scene/PlanetarySystem.tsx
-// Manages all planets, asteroid belt, comet, Saturn particle effects, and planet mesh refs
 
 import type { PlanetarySystemConfig } from "@/types/scene.types";
 import { useFrame } from "@react-three/fiber";

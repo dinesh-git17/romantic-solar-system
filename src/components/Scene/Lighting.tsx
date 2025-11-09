@@ -1,38 +1,27 @@
 // src/components/Scene/Lighting.tsx
+
 import type { LightingConfig } from "@/types/scene.types";
-import { memo } from "react";
 
 interface LightingProps {
   config: LightingConfig;
 }
 
-export const Lighting = memo<LightingProps>(({ config }) => {
+export const Lighting: React.FC<LightingProps> = ({ config }) => {
   return (
     <>
-      <ambientLight
-        intensity={config.ambient.intensity}
-        color={config.ambient.color}
-      />
+      <ambientLight intensity={config.ambientIntensity} />
       <directionalLight
-        intensity={config.directional.intensity}
-        position={config.directional.position}
-        color={config.directional.color}
+        position={[10, 10, 5]}
+        intensity={config.directionalIntensity}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-far={500}
-        shadow-camera-left={-100}
-        shadow-camera-right={100}
-        shadow-camera-top={100}
-        shadow-camera-bottom={-100}
       />
       <pointLight
         position={[0, 0, 0]}
-        intensity={0.5}
-        color="#ffffff"
+        intensity={config.pointLightIntensity}
         distance={300}
         decay={2}
+        color="#ffffff"
       />
     </>
   );
-});
+};

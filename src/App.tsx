@@ -1,33 +1,50 @@
 // src/App.tsx
+
 import { SceneSetup } from "@/components/Scene/SceneSetup";
+import type { SceneConfig } from "@/types/scene.types";
 import { Canvas } from "@react-three/fiber";
 
-const App = () => {
-  return (
-    <Canvas
-      camera={{
-        position: [0, 50, 100],
-        fov: 75,
-        near: 0.1,
-        far: 2000,
-      }}
-      shadows
-      dpr={[1, 2]}
-      gl={{
-        antialias: true,
-        alpha: false,
-        powerPreference: "high-performance",
-      }}
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "block",
-      }}
-    >
-      <color attach="background" args={["#000000"]} />
-      <SceneSetup showHelpers={false} />
-    </Canvas>
-  );
+const sceneConfig: SceneConfig = {
+  starfield: {
+    count: 8000,
+    radius: 150,
+    depth: 200,
+  },
+  lighting: {
+    ambientIntensity: 0.3,
+    directionalIntensity: 1.5,
+    pointLightIntensity: 5.0,
+  },
+  camera: {
+    minDistance: 10,
+    maxDistance: 200,
+    minPolarAngle: 0.1,
+    maxPolarAngle: Math.PI - 0.1,
+  },
+  sun: {
+    radius: 12,
+    emissiveIntensity: 2.0,
+    rotationSpeed: 0.05,
+    glowStrength: 1.5,
+  },
 };
+
+function App() {
+  return (
+    <div className="w-screen h-screen">
+      <Canvas
+        camera={{ position: [0, 50, 100], fov: 60 }}
+        gl={{
+          antialias: true,
+          toneMapping: 2,
+          toneMappingExposure: 1.0,
+        }}
+        frameloop="always"
+      >
+        <SceneSetup config={sceneConfig} showHelpers={false} />
+      </Canvas>
+    </div>
+  );
+}
 
 export default App;

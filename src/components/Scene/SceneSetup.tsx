@@ -1,78 +1,31 @@
 // src/components/Scene/SceneSetup.tsx
-import type { HelperConfig, SceneConfig } from "@/types/scene.types";
-import { memo } from "react";
+
+import type { SceneConfig } from "@/types/scene.types";
 import { CameraController } from "./CameraController";
 import { DevelopmentHelpers } from "./DevelopmentHelpers";
+import { Effects } from "./Effects";
 import { Lighting } from "./Lighting";
 import { Starfield } from "./Starfield";
+import { Sun } from "./Sun";
 
 interface SceneSetupProps {
+  config: SceneConfig;
   showHelpers?: boolean;
 }
 
-const SCENE_CONFIG: SceneConfig = {
-  camera: {
-    position: [0, 50, 100],
-    fov: 75,
-    near: 0.1,
-    far: 2000,
-  },
-  controls: {
-    enableDamping: true,
-    dampingFactor: 0.05,
-    minDistance: 10,
-    maxDistance: 200,
-    minPolarAngle: 0.1,
-    maxPolarAngle: Math.PI - 0.1,
-    enablePan: true,
-    panSpeed: 0.5,
-    rotateSpeed: 0.5,
-    zoomSpeed: 0.8,
-    autoRotate: false,
-    autoRotateSpeed: 0.5,
-  },
-  lighting: {
-    ambient: {
-      intensity: 0.3,
-      color: "#ffffff",
-    },
-    directional: {
-      intensity: 1.5,
-      position: [50, 50, 50],
-      color: "#ffffff",
-    },
-  },
-  starfield: {
-    count: 8000,
-    radius: 300,
-    depth: 200,
-    size: 1.0,
-    color: "#ffffff",
-  },
-  showHelpers: false,
+export const SceneSetup: React.FC<SceneSetupProps> = ({
+  config,
+  showHelpers = false,
+}) => {
+  return (
+    <Effects sunConfig={config.sun}>
+      <Starfield config={config.starfield} />
+      <Lighting config={config.lighting} />
+      <Sun config={config.sun} />
+      <CameraController config={config.camera} />
+      {showHelpers && (
+        <DevelopmentHelpers config={config} showHelpers={showHelpers} />
+      )}
+    </Effects>
+  );
 };
-
-const HELPER_CONFIG: HelperConfig = {
-  grid: {
-    size: 100,
-    divisions: 20,
-    colorCenterLine: "#1a1a1a",
-    colorGrid: "#333333",
-  },
-  axes: {
-    size: 50,
-  },
-};
-
-export const SceneSetup = memo<SceneSetupProps>(
-  ({ showHelpers = SCENE_CONFIG.showHelpers }) => {
-    return (
-      <>
-        <Starfield config={SCENE_CONFIG.starfield} />
-        <Lighting config={SCENE_CONFIG.lighting} />
-        <CameraController config={SCENE_CONFIG.controls} />
-        <DevelopmentHelpers config={HELPER_CONFIG} showHelpers={showHelpers} />
-      </>
-    );
-  }
-);

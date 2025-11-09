@@ -15,11 +15,30 @@ const sceneConfig: SceneConfig = {
     directionalIntensity: 1.5,
     pointLightIntensity: 5.0,
   },
-  camera: {
+  controls: {
+    enableDamping: true,
+    dampingFactor: 0.05,
     minDistance: 10,
     maxDistance: 200,
     minPolarAngle: 0.1,
     maxPolarAngle: Math.PI - 0.1,
+    enablePan: true,
+    panSpeed: 1.0,
+    rotateSpeed: 1.0,
+    zoomSpeed: 1.0,
+    autoRotate: false,
+    autoRotateSpeed: 0.5,
+  },
+  helpers: {
+    grid: {
+      size: 100,
+      divisions: 10,
+      colorCenterLine: "#444444",
+      colorGrid: "#222222",
+    },
+    axes: {
+      size: 50,
+    },
   },
   sun: {
     radius: 12,

@@ -12,11 +12,31 @@ export interface LightingConfig {
   pointLightIntensity: number;
 }
 
-export interface CameraConfig {
+export interface ControlsConfig {
+  enableDamping: boolean;
+  dampingFactor: number;
   minDistance: number;
   maxDistance: number;
   minPolarAngle: number;
   maxPolarAngle: number;
+  enablePan: boolean;
+  panSpeed: number;
+  rotateSpeed: number;
+  zoomSpeed: number;
+  autoRotate: boolean;
+  autoRotateSpeed: number;
+}
+
+export interface HelperConfig {
+  grid: {
+    size: number;
+    divisions: number;
+    colorCenterLine: string;
+    colorGrid: string;
+  };
+  axes: {
+    size: number;
+  };
 }
 
 export interface SunConfig {
@@ -30,6 +50,7 @@ export interface SunConfig {
 export interface SceneConfig {
   starfield: StarfieldConfig;
   lighting: LightingConfig;
-  camera: CameraConfig;
+  controls: ControlsConfig;
+  helpers: HelperConfig;
   sun: SunConfig;
 }

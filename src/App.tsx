@@ -4,8 +4,8 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import { LandingPage } from "./components/Landing/LandingPage";
 import { SceneSetup } from "./components/Scene/SceneSetup";
+import { BackToHomeButton } from "./components/UI/BackToHomeButton";
 import { BackToOverviewButton } from "./components/UI/BackToOverviewButton";
-import { ModeToggle } from "./components/UI/ModeToggle";
 import { PlanetInfoPanel } from "./components/UI/PlanetInfoPanel";
 import { useAppStore } from "./store/appStore";
 import { useCameraStore } from "./store/cameraStore";
@@ -264,7 +264,7 @@ function App() {
         </Canvas>
         {!showLanding && (
           <>
-            <ModeToggle />
+            <BackToHomeButton />
             <BackToOverviewButton />
             <PlanetInfoPanel />
           </>

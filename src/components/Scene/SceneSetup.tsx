@@ -3,6 +3,7 @@
 import type { SceneConfig } from "@/types/scene.types";
 import { CameraController } from "./CameraController";
 import { DevelopmentHelpers } from "./DevelopmentHelpers";
+import { Effects } from "./Effects";
 import { Lighting } from "./Lighting";
 import { Starfield } from "./Starfield";
 import { Sun } from "./Sun";
@@ -25,6 +26,7 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
       {showHelpers && (
         <DevelopmentHelpers config={config.helpers} showHelpers={showHelpers} />
       )}
+      <Effects sunConfig={config.sun} />
     </>
   );
 };

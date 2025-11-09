@@ -45,6 +45,7 @@ const sceneConfig: SceneConfig = {
     emissiveIntensity: 2.0,
     rotationSpeed: 0.05,
     glowStrength: 1.5,
+    textureUrl: "/textures/8k_sun.jpg",
   },
 };
 

@@ -87,37 +87,43 @@ export const useCameraAnimation = ({
     selectedPlanet,
     getPlanetPosition,
     controlsRef,
-    camera.position,
+    camera,
     defaultCameraPosition,
     defaultCameraTarget,
     setAnimating,
   ]);
 
   const updateAnimation = () => {
-    if (!animationRef.current || !controlsRef.current) return;
+    if (animationRef.current && controlsRef.current) {
+      const elapsed = Date.now() - animationRef.current.startTime;
+      const progress = Math.min(elapsed / animationRef.current.duration, 1);
+      const easedProgress = easeInOutCubic(progress);
 
-    const elapsed = Date.now() - animationRef.current.startTime;
-    const progress = Math.min(elapsed / animationRef.current.duration, 1);
-    const easedProgress = easeInOutCubic(progress);
+      camera.position.lerpVectors(
+        animationRef.current.startPosition,
+        animationRef.current.endPosition,
+        easedProgress
+      );
 
-    camera.position.lerpVectors(
-      animationRef.current.startPosition,
-      animationRef.current.endPosition,
-      easedProgress
-    );
+      const currentTarget = new THREE.Vector3().lerpVectors(
+        animationRef.current.startTarget,
+        animationRef.current.endTarget,
+        easedProgress
+      );
 
-    const currentTarget = new THREE.Vector3().lerpVectors(
-      animationRef.current.startTarget,
-      animationRef.current.endTarget,
-      easedProgress
-    );
+      controlsRef.current.target.copy(currentTarget);
+      controlsRef.current.update();
 
-    controlsRef.current.target.copy(currentTarget);
-    controlsRef.current.update();
-
-    if (progress >= 1) {
-      animationRef.current = null;
-      setAnimating(false);
+      if (progress >= 1) {
+        animationRef.current = null;
+        setAnimating(false);
+      }
+    } else if (selectedPlanet && controlsRef.current) {
+      const planetData = getPlanetPosition(selectedPlanet);
+      if (planetData) {
+        controlsRef.current.target.copy(planetData.position);
+        controlsRef.current.update();
+      }
     }
   };
 

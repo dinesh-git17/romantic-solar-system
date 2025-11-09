@@ -1,4 +1,5 @@
 // src/App.tsx
+// Main application entry with complete scene configuration
 
 import { SceneSetup } from "@/components/Scene/SceneSetup";
 import type { SceneConfig } from "@/types/scene.types";
@@ -49,6 +50,7 @@ const sceneConfig: SceneConfig = {
   },
   planetarySystem: {
     showOrbits: true,
+    orbitOpacity: 0.05,
     planets: [
       {
         name: "Mercury",
@@ -86,6 +88,10 @@ const sceneConfig: SceneConfig = {
         textureUrl: "/textures/8k_earth_daymap.jpg",
         color: "#4169E1",
         hasAtmosphere: true,
+        hasCloudLayer: true,
+        cloudTextureUrl: "/textures/8k_earth_clouds.jpg",
+        cloudRotationSpeed: 0.08,
+        cloudOpacity: 0.5,
       },
       {
         name: "Mars",
@@ -155,6 +161,38 @@ const sceneConfig: SceneConfig = {
         emissiveIntensity: 0.1,
       },
     ],
+    asteroidBelt: {
+      innerRadius: 65,
+      outerRadius: 75,
+      count: 2000,
+      minSize: 0.1,
+      maxSize: 0.5,
+      verticalSpread: 2,
+      colors: ["#8C7853", "#6B5B4D", "#4A4A4A"],
+      revolutionSpeed: 0.02,
+    },
+    comet: {
+      enabled: true,
+      orbitalRadius: 120,
+      eccentricity: 0.92,
+      revolutionSpeed: 0.015,
+      initialAngle: 0,
+      nucleusRadius: 0.5,
+      nucleusColor: "#E0E0E0",
+      nucleusEmissive: "#88CCFF",
+      nucleusEmissiveIntensity: 1.5,
+      tailParticleCount: 150,
+      tailLength: 25,
+      tailColor: "#66AAFF",
+    },
+    saturnParticles: {
+      enabled: true,
+      count: 800,
+      minRadius: 8,
+      maxRadius: 14,
+      colors: ["#C9B79C", "#F4A460"],
+      particleSize: 0.08,
+    },
   },
 };
 

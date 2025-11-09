@@ -1,4 +1,5 @@
 // src/types/scene.types.ts
+// Type definitions for the 3D solar system scene configuration
 
 export interface StarfieldConfig {
   count: number;
@@ -65,6 +66,10 @@ export interface PlanetConfig {
   ringInnerRadius?: number;
   ringOuterRadius?: number;
   ringTextureUrl?: string;
+  hasCloudLayer?: boolean;
+  cloudTextureUrl?: string;
+  cloudRotationSpeed?: number;
+  cloudOpacity?: number;
 }
 
 export interface OrbitRingConfig {
@@ -75,9 +80,48 @@ export interface OrbitRingConfig {
   segments: number;
 }
 
+export interface AsteroidBeltConfig {
+  innerRadius: number;
+  outerRadius: number;
+  count: number;
+  minSize: number;
+  maxSize: number;
+  verticalSpread: number;
+  colors: string[];
+  revolutionSpeed: number;
+}
+
+export interface CometConfig {
+  enabled: boolean;
+  orbitalRadius: number;
+  eccentricity: number;
+  revolutionSpeed: number;
+  initialAngle: number;
+  nucleusRadius: number;
+  nucleusColor: string;
+  nucleusEmissive: string;
+  nucleusEmissiveIntensity: number;
+  tailParticleCount: number;
+  tailLength: number;
+  tailColor: string;
+}
+
+export interface SaturnParticlesConfig {
+  enabled: boolean;
+  count: number;
+  minRadius: number;
+  maxRadius: number;
+  colors: string[];
+  particleSize: number;
+}
+
 export interface PlanetarySystemConfig {
   planets: PlanetConfig[];
   showOrbits: boolean;
+  orbitOpacity?: number;
+  asteroidBelt?: AsteroidBeltConfig;
+  comet?: CometConfig;
+  saturnParticles?: SaturnParticlesConfig;
 }
 
 export interface SceneConfig {

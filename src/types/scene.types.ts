@@ -47,10 +47,44 @@ export interface SunConfig {
   glowStrength: number;
 }
 
+export interface PlanetConfig {
+  name: string;
+  radius: number;
+  orbitalRadius: number;
+  eccentricity: number;
+  axialTilt: number;
+  rotationSpeed: number;
+  revolutionSpeed: number;
+  initialAngle: number;
+  textureUrl?: string;
+  color: string;
+  emissive?: string;
+  emissiveIntensity?: number;
+  hasAtmosphere?: boolean;
+  hasRings?: boolean;
+  ringInnerRadius?: number;
+  ringOuterRadius?: number;
+  ringTextureUrl?: string;
+}
+
+export interface OrbitRingConfig {
+  orbitalRadius: number;
+  eccentricity: number;
+  color: string;
+  opacity: number;
+  segments: number;
+}
+
+export interface PlanetarySystemConfig {
+  planets: PlanetConfig[];
+  showOrbits: boolean;
+}
+
 export interface SceneConfig {
   starfield: StarfieldConfig;
   lighting: LightingConfig;
   controls: ControlsConfig;
   helpers: HelperConfig;
   sun: SunConfig;
+  planetarySystem: PlanetarySystemConfig;
 }

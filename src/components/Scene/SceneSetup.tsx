@@ -5,6 +5,7 @@ import { CameraController } from "./CameraController";
 import { DevelopmentHelpers } from "./DevelopmentHelpers";
 import { Effects } from "./Effects";
 import { Lighting } from "./Lighting";
+import { PlanetarySystem } from "./PlanetarySystem";
 import { Starfield } from "./Starfield";
 import { Sun } from "./Sun";
 
@@ -22,6 +23,7 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
       <Starfield config={config.starfield} />
       <Lighting config={config.lighting} />
       <Sun config={config.sun} />
+      <PlanetarySystem config={config.planetarySystem} />
       <CameraController config={config.controls} />
       {showHelpers && (
         <DevelopmentHelpers config={config.helpers} showHelpers={showHelpers} />

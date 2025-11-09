@@ -6,9 +6,11 @@ import type { PlanetPosition } from "@/types/scene.types";
 import { useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import type { OrbitControls } from "three-stdlib";
 
 interface UseCameraAnimationProps {
   getPlanetPosition: (name: string) => PlanetPosition | undefined;
+  controlsRef: React.RefObject<OrbitControls | null>;
 }
 
 const easeInOutCubic = (t: number): number => {
@@ -17,11 +19,11 @@ const easeInOutCubic = (t: number): number => {
 
 export const useCameraAnimation = ({
   getPlanetPosition,
+  controlsRef,
 }: UseCameraAnimationProps) => {
   const { camera } = useThree();
   const {
     selectedPlanet,
-    isAnimating,
     setAnimating,
     defaultCameraPosition,
     defaultCameraTarget,
@@ -49,23 +51,27 @@ export const useCameraAnimation = ({
         planetData.position.z + viewDistance * Math.sin(angle)
       );
 
+      const startTarget =
+        controlsRef.current?.target.clone() ?? new THREE.Vector3(0, 0, 0);
+
       animationRef.current = {
         startPosition: camera.position.clone(),
         endPosition: targetPosition,
-        startTarget: new THREE.Vector3(0, 0, 0),
+        startTarget: startTarget,
         endTarget: planetData.position.clone(),
         startTime: Date.now(),
         duration: 1500,
       };
 
       setAnimating(true);
-    } else if (!selectedPlanet && isAnimating) {
+    } else if (!selectedPlanet && animationRef.current !== null) {
+      const startTarget =
+        controlsRef.current?.target.clone() ?? new THREE.Vector3(0, 0, 0);
+
       animationRef.current = {
         startPosition: camera.position.clone(),
         endPosition: defaultCameraPosition.clone(),
-        startTarget: camera.position
-          .clone()
-          .add(new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion)),
+        startTarget: startTarget,
         endTarget: defaultCameraTarget.clone(),
         startTime: Date.now(),
         duration: 1500,
@@ -80,11 +86,11 @@ export const useCameraAnimation = ({
     setAnimating,
     defaultCameraPosition,
     defaultCameraTarget,
-    isAnimating,
+    controlsRef,
   ]);
 
   const updateAnimation = () => {
-    if (!animationRef.current) return;
+    if (!animationRef.current || !controlsRef.current) return;
 
     const elapsed = Date.now() - animationRef.current.startTime;
     const progress = Math.min(elapsed / animationRef.current.duration, 1);
@@ -102,7 +108,8 @@ export const useCameraAnimation = ({
       easedProgress
     );
 
-    camera.lookAt(currentTarget);
+    controlsRef.current.target.copy(currentTarget);
+    controlsRef.current.update();
 
     if (progress >= 1) {
       animationRef.current = null;

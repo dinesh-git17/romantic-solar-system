@@ -7,8 +7,9 @@ import { usePlanetTracking } from "@/hooks/usePlanetTracking";
 import { useCameraStore } from "@/store/cameraStore";
 import type { SceneConfig } from "@/types/scene.types";
 import { useFrame } from "@react-three/fiber";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { Mesh } from "three";
+import type { OrbitControls } from "three-stdlib";
 import { CameraController } from "./CameraController";
 import { DevelopmentHelpers } from "./DevelopmentHelpers";
 import { Effects } from "./Effects";
@@ -29,12 +30,14 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
   const [planetMeshRefs, setPlanetMeshRefs] = useState<Map<string, Mesh>>(
     new Map()
   );
+  const controlsRef = useRef<OrbitControls | null>(null);
   const { selectedPlanet } = useCameraStore();
   const { getPlanetPosition } = usePlanetTracking(
     config.planetarySystem.planets
   );
   const { updateAnimation, currentTarget } = useCameraAnimation({
     getPlanetPosition,
+    controlsRef,
   });
 
   usePlanetClick({ planetMeshRefs });
@@ -61,6 +64,7 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
         onPlanetMeshesReady={handlePlanetMeshesReady}
       />
       <CameraController
+        ref={controlsRef}
         config={config.controls}
         dynamicTarget={currentTarget}
         planetRadius={planetData?.radius}

@@ -1,5 +1,5 @@
 // src/components/UI/PlanetInfoPanel.tsx
-// Main information panel with tabbed interface for facts and romantic messages
+// Main information panel with tabbed interface synced to global view mode
 
 import { planetFacts } from "@/data/planetFacts";
 import { useCameraStore } from "@/store/cameraStore";
@@ -10,7 +10,7 @@ import { PlanetFact } from "./PlanetFact";
 type TabType = "facts" | "message";
 
 const PlanetInfoPanelComponent: React.FC = () => {
-  const { selectedPlanet, isAnimating } = useCameraStore();
+  const { selectedPlanet, isAnimating, viewMode } = useCameraStore();
   const [isVisible, setIsVisible] = useState(false);
   const [currentPlanet, setCurrentPlanet] = useState<PlanetName | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>("facts");
@@ -19,7 +19,7 @@ const PlanetInfoPanelComponent: React.FC = () => {
     if (selectedPlanet && !isAnimating) {
       setCurrentPlanet(selectedPlanet as PlanetName);
       setIsVisible(true);
-      setActiveTab("facts");
+      setActiveTab(viewMode === "educational" ? "facts" : "message");
     } else if (!selectedPlanet) {
       setIsVisible(false);
       const timer = setTimeout(() => {
@@ -29,7 +29,7 @@ const PlanetInfoPanelComponent: React.FC = () => {
         clearTimeout(timer);
       };
     }
-  }, [selectedPlanet, isAnimating]);
+  }, [selectedPlanet, isAnimating, viewMode]);
 
   if (!currentPlanet) return null;
 

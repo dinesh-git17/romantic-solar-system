@@ -5,6 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react";
 import { SceneSetup } from "./components/Scene/SceneSetup";
 import { BackToOverviewButton } from "./components/UI/BackToOverviewButton";
+import { ModeToggle } from "./components/UI/ModeToggle";
 import { PlanetInfoPanel } from "./components/UI/PlanetInfoPanel";
 import { useCameraStore } from "./store/cameraStore";
 import type { SceneConfig } from "./types/scene.types";
@@ -54,7 +55,7 @@ const sceneConfig: SceneConfig = {
   },
   planetarySystem: {
     showOrbits: true,
-    orbitOpacity: 0.03,
+    orbitOpacity: 0.08,
     planets: [
       {
         name: "Mercury",
@@ -242,6 +243,7 @@ function App() {
       >
         <SceneSetup config={sceneConfig} showHelpers={false} />
       </Canvas>
+      <ModeToggle />
       <BackToOverviewButton />
       <PlanetInfoPanel />
     </div>

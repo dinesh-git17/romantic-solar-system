@@ -14,6 +14,7 @@ import { PlanetInfoPanel } from "./components/UI/PlanetInfoPanel";
 import { useAppStore } from "./store/appStore";
 import { useAudioStore } from "./store/audioStore";
 import { useCameraStore } from "./store/cameraStore";
+import { useRomanticStore } from "./store/romanticStore";
 import type { AppMode } from "./types/app.types";
 import type { SceneConfig } from "./types/scene.types";
 
@@ -212,6 +213,7 @@ function App() {
   const { showLanding, mode, setMode, hideLanding } = useAppStore();
   const { deselectPlanet, selectedPlanet, setViewMode } = useCameraStore();
   const { isAutoplayBlocked, play } = useAudioStore();
+  const { hasSeenRomanticOpening } = useRomanticStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
@@ -233,7 +235,6 @@ function App() {
     setViewMode(selectedMode);
     setIsTransitioning(true);
 
-    // Start audio immediately while user gesture is fresh
     useAudioStore.getState().setTrack(selectedMode);
     useAudioStore.getState().play();
 
@@ -248,6 +249,9 @@ function App() {
   const handleEnableSound = () => {
     play();
   };
+
+  const shouldShowOpeningSequence =
+    mode === "romantic" && !hasSeenRomanticOpening;
 
   return (
     <div className="w-screen h-screen relative">
@@ -275,7 +279,11 @@ function App() {
           }}
           frameloop="always"
         >
-          <SceneSetup config={sceneConfig} showHelpers={false} />
+          <SceneSetup
+            config={sceneConfig}
+            showHelpers={false}
+            enableOpeningSequence={shouldShowOpeningSequence}
+          />
         </Canvas>
         {!showLanding && (
           <>

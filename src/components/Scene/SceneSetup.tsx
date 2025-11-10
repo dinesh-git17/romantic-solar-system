@@ -9,6 +9,8 @@ import { useFrame } from "@react-three/fiber";
 import { useCallback, useRef, useState } from "react";
 import type { Mesh } from "three";
 import type { OrbitControls } from "three-stdlib";
+import { RomanticOpeningSequence } from "../Romantic/RomanticOpeningSequence";
+import { RomanticStardust } from "../Romantic/RomanticStardust";
 import { CameraController } from "./CameraController";
 import { DevelopmentHelpers } from "./DevelopmentHelpers";
 import { Effects } from "./Effects";
@@ -20,17 +22,19 @@ import { Sun } from "./Sun";
 interface SceneSetupProps {
   config: SceneConfig;
   showHelpers?: boolean;
+  enableOpeningSequence?: boolean;
 }
 
 export const SceneSetup: React.FC<SceneSetupProps> = ({
   config,
   showHelpers = false,
+  enableOpeningSequence = false,
 }) => {
   const [planetMeshRefs, setPlanetMeshRefs] = useState<Map<string, Mesh>>(
     new Map()
   );
   const controlsRef = useRef<OrbitControls | null>(null);
-  const { selectedPlanet } = useCameraStore();
+  const { selectedPlanet, viewMode, isAnimating } = useCameraStore();
   const { getPlanetPosition } = usePlanetTracking(
     config.planetarySystem.planets
   );
@@ -46,6 +50,7 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
   }, []);
 
   useFrame(() => {
+    if (!isAnimating) return;
     updateAnimation();
   });
 
@@ -55,7 +60,11 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
 
   return (
     <>
+      {enableOpeningSequence && (
+        <RomanticOpeningSequence controlsRef={controlsRef} />
+      )}
       <Starfield config={config.starfield} />
+      {viewMode === "romantic" && <RomanticStardust count={800} />}
       <Lighting config={config.lighting} />
       <Sun config={config.sun} />
       <PlanetarySystem

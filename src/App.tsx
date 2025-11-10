@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import { LandingPage } from "./components/Landing/LandingPage";
+import { NarrationOverlay } from "./components/Romantic/NarrationOverlay";
 import { SceneSetup } from "./components/Scene/SceneSetup";
 import { AudioControls } from "./components/UI/AudioControls";
 import { AudioPlayer } from "./components/UI/AudioPlayer";
@@ -213,8 +214,20 @@ function App() {
   const { showLanding, mode, setMode, hideLanding } = useAppStore();
   const { deselectPlanet, selectedPlanet, setViewMode } = useCameraStore();
   const { isAutoplayBlocked, play } = useAudioStore();
-  const { hasSeenRomanticOpening } = useRomanticStore();
+  const { hasSeenRomanticOpening, setRomanticOpeningSeen } = useRomanticStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showNarration, setShowNarration] = useState(false);
+
+  useEffect(() => {
+    if (mode === "romantic" && !hasSeenRomanticOpening && !showLanding) {
+      setShowNarration(true);
+    }
+  }, [mode, hasSeenRomanticOpening, showLanding]);
+
+  const handleNarrationComplete = () => {
+    setShowNarration(false);
+    setRomanticOpeningSeen();
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -287,6 +300,9 @@ function App() {
         </Canvas>
         {!showLanding && (
           <>
+            {showNarration && (
+              <NarrationOverlay onComplete={handleNarrationComplete} />
+            )}
             <AudioPlayer mode={mode} />
             <AudioControls />
             {isAutoplayBlocked && (

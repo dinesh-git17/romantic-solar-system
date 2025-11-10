@@ -4,11 +4,15 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import { LandingPage } from "./components/Landing/LandingPage";
 import { SceneSetup } from "./components/Scene/SceneSetup";
+import { AudioControls } from "./components/UI/AudioControls";
+import { AudioPlayer } from "./components/UI/AudioPlayer";
 import { BackToHomeButton } from "./components/UI/BackToHomeButton";
 import { BackToOverviewButton } from "./components/UI/BackToOverviewButton";
 import { DeveloperAttribution } from "./components/UI/DeveloperAttribution";
+import { EnableSoundButton } from "./components/UI/EnableSoundButton";
 import { PlanetInfoPanel } from "./components/UI/PlanetInfoPanel";
 import { useAppStore } from "./store/appStore";
+import { useAudioStore } from "./store/audioStore";
 import { useCameraStore } from "./store/cameraStore";
 import type { AppMode } from "./types/app.types";
 import type { SceneConfig } from "./types/scene.types";
@@ -67,8 +71,8 @@ const sceneConfig: SceneConfig = {
         eccentricity: 0.206,
         axialTilt: 0.034,
         rotationSpeed: 0.017,
-        revolutionSpeed: 0.04,
-        initialAngle: 0.5,
+        revolutionSpeed: 0.047,
+        initialAngle: 0,
         textureUrl: "/textures/8k_mercury.jpg",
         color: "#8C7853",
       },
@@ -78,9 +82,9 @@ const sceneConfig: SceneConfig = {
         orbitalRadius: 28,
         eccentricity: 0.007,
         axialTilt: 3.09,
-        rotationSpeed: -0.004,
+        rotationSpeed: 0.004,
         revolutionSpeed: 0.035,
-        initialAngle: 1.8,
+        initialAngle: 1.2,
         textureUrl: "/textures/8k_venus_surface.jpg",
         color: "#FFC649",
       },
@@ -95,6 +99,7 @@ const sceneConfig: SceneConfig = {
         initialAngle: 3.4,
         textureUrl: "/textures/8k_earth_daymap.jpg",
         color: "#4169E1",
+        hasAtmosphere: true,
         hasCloudLayer: true,
         cloudTextureUrl: "/textures/8k_earth_clouds.jpg",
         cloudRotationSpeed: 0.08,
@@ -204,8 +209,9 @@ const sceneConfig: SceneConfig = {
 };
 
 function App() {
-  const { showLanding, setMode, hideLanding } = useAppStore();
+  const { showLanding, mode, setMode, hideLanding } = useAppStore();
   const { deselectPlanet, selectedPlanet, setViewMode } = useCameraStore();
+  const { isAutoplayBlocked, play } = useAudioStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
@@ -227,12 +233,20 @@ function App() {
     setViewMode(selectedMode);
     setIsTransitioning(true);
 
+    // Start audio immediately while user gesture is fresh
+    useAudioStore.getState().setTrack(selectedMode);
+    useAudioStore.getState().play();
+
     setTimeout(() => {
       hideLanding();
       setTimeout(() => {
         setIsTransitioning(false);
       }, 100);
     }, 1000);
+  };
+
+  const handleEnableSound = () => {
+    play();
   };
 
   return (
@@ -265,6 +279,11 @@ function App() {
         </Canvas>
         {!showLanding && (
           <>
+            <AudioPlayer mode={mode} />
+            <AudioControls />
+            {isAutoplayBlocked && (
+              <EnableSoundButton onEnable={handleEnableSound} />
+            )}
             <BackToHomeButton />
             <BackToOverviewButton />
             <PlanetInfoPanel />

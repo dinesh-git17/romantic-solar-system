@@ -6,6 +6,7 @@ import { LandingPage } from "./components/Landing/LandingPage";
 import { SceneSetup } from "./components/Scene/SceneSetup";
 import { BackToHomeButton } from "./components/UI/BackToHomeButton";
 import { BackToOverviewButton } from "./components/UI/BackToOverviewButton";
+import { DeveloperAttribution } from "./components/UI/DeveloperAttribution";
 import { PlanetInfoPanel } from "./components/UI/PlanetInfoPanel";
 import { useAppStore } from "./store/appStore";
 import { useCameraStore } from "./store/cameraStore";
@@ -267,6 +268,7 @@ function App() {
             <BackToHomeButton />
             <BackToOverviewButton />
             <PlanetInfoPanel />
+            <DeveloperAttribution />
           </>
         )}
       </div>

@@ -1,5 +1,5 @@
 // src/components/Romantic/NarrationOverlay.tsx
-// Modern romantic narration overlay with typewriter effect and cosmic design
+// Modern romantic narration overlay with typewriter effect completing before fade
 
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ export const NarrationOverlay: React.FC<NarrationOverlayProps> = ({
 
   useEffect(() => {
     let currentIndex = 0;
-    const typingSpeed = 50;
+    const typingSpeed = 75;
 
     const typingInterval = setInterval(() => {
       if (currentIndex <= fullText.length) {
@@ -31,11 +31,11 @@ export const NarrationOverlay: React.FC<NarrationOverlayProps> = ({
 
     const fadeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 8000);
+    }, 11000);
 
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 10000);
+    }, 15000);
 
     return () => {
       clearInterval(typingInterval);
@@ -46,7 +46,7 @@ export const NarrationOverlay: React.FC<NarrationOverlayProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-40 flex items-center justify-center pointer-events-none transition-opacity duration-2000 ${
+      className={`fixed inset-0 z-40 flex items-center justify-center pointer-events-none transition-opacity duration-[4000ms] ease-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >

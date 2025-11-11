@@ -1,5 +1,5 @@
 // src/components/Romantic/RomanticOpeningSequence.tsx
-// Cinematic 15-second camera orbit with natural, smooth movement
+// Cinematic slow-motion camera orbit with ultra-smooth movement
 
 import { useCameraStore } from "@/store/cameraStore";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -25,7 +25,7 @@ export const RomanticOpeningSequence: React.FC<
   const isComplete = useRef(false);
   const lookAtTarget = useRef(new THREE.Vector3(0, 0, 0));
 
-  const animationDuration = 15000;
+  const animationDuration = 25000;
   const orbitRadius = 120;
   const orbitHeight = 60;
 
@@ -55,7 +55,7 @@ export const RomanticOpeningSequence: React.FC<
     const easedProgress = easeInOutCubic(progress);
 
     const startAngle = Math.PI * 0.25;
-    const endAngle = startAngle + Math.PI * 1.5;
+    const endAngle = startAngle + Math.PI * 1.0;
     const currentAngle = startAngle + (endAngle - startAngle) * easedProgress;
 
     const startHeight = orbitHeight;

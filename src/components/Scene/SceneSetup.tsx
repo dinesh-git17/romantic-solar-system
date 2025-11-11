@@ -1,5 +1,5 @@
 // src/components/Scene/SceneSetup.tsx
-// Main scene orchestrator with conditional camera animation control
+// Main scene orchestrator with conditional camera animation and romantic stardust
 
 import { useCameraAnimation } from "@/hooks/useCameraAnimation";
 import { usePlanetClick } from "@/hooks/usePlanetClick";
@@ -11,6 +11,7 @@ import { useCallback, useRef, useState } from "react";
 import type { Mesh } from "three";
 import type { OrbitControls } from "three-stdlib";
 import { RomanticOpeningSequence } from "../Romantic/RomanticOpeningSequence";
+import { RomanticStardust } from "../Romantic/RomanticStardust";
 import { CameraController } from "./CameraController";
 import { DevelopmentHelpers } from "./DevelopmentHelpers";
 import { Effects } from "./Effects";
@@ -34,7 +35,7 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
     new Map()
   );
   const controlsRef = useRef<OrbitControls | null>(null);
-  const { selectedPlanet } = useCameraStore();
+  const { selectedPlanet, viewMode } = useCameraStore();
   const { getPlanetPosition } = usePlanetTracking(
     config.planetarySystem.planets
   );
@@ -65,6 +66,7 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
         <RomanticOpeningSequence controlsRef={controlsRef} />
       )}
       <Starfield config={config.starfield} />
+      {viewMode === "romantic" && <RomanticStardust />}
       <Lighting config={config.lighting} />
       <Sun config={config.sun} />
       <PlanetarySystem

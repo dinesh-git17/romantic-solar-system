@@ -225,7 +225,7 @@ function App() {
 
       const timer = setTimeout(() => {
         setRomanticOpeningSeen();
-      }, 20000);
+      }, 15000);
 
       return () => {
         clearTimeout(timer);

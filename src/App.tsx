@@ -1,4 +1,5 @@
 // src/App.tsx
+// Main application with romantic mode opening sequence timing coordination
 
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
@@ -221,12 +222,19 @@ function App() {
   useEffect(() => {
     if (mode === "romantic" && !hasSeenRomanticOpening && !showLanding) {
       setShowNarration(true);
+
+      const timer = setTimeout(() => {
+        setRomanticOpeningSeen();
+      }, 20000);
+
+      return () => {
+        clearTimeout(timer);
+      };
     }
-  }, [mode, hasSeenRomanticOpening, showLanding]);
+  }, [mode, hasSeenRomanticOpening, showLanding, setRomanticOpeningSeen]);
 
   const handleNarrationComplete = () => {
     setShowNarration(false);
-    setRomanticOpeningSeen();
   };
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 // src/components/Scene/SceneSetup.tsx
+// Main scene orchestrator with conditional camera animation control
 
 import { useCameraAnimation } from "@/hooks/useCameraAnimation";
 import { usePlanetClick } from "@/hooks/usePlanetClick";
@@ -49,7 +50,9 @@ export const SceneSetup: React.FC<SceneSetupProps> = ({
   }, []);
 
   useFrame(() => {
-    updateAnimation();
+    if (!enableOpeningSequence) {
+      updateAnimation();
+    }
   });
 
   const planetData = selectedPlanet

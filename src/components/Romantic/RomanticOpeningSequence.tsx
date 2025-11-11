@@ -1,5 +1,5 @@
 // src/components/Romantic/RomanticOpeningSequence.tsx
-// Cinematic camera orbit animation around the sun
+// Cinematic 20-second camera orbit animation around the sun with 2.5 full rotations
 
 import { useCameraStore } from "@/store/cameraStore";
 import { useFrame, useThree } from "@react-three/fiber";

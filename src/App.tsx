@@ -5,6 +5,8 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import { LandingPage } from "./components/Landing/LandingPage";
 import { NarrationOverlay } from "./components/Romantic/NarrationOverlay";
+import { OpeningProgressBar } from "./components/Romantic/OpeningProgressBar";
+import { SkipIntroButton } from "./components/Romantic/SkipIntroButton";
 import { SceneSetup } from "./components/Scene/SceneSetup";
 import { AudioControls } from "./components/UI/AudioControls";
 import { AudioPlayer } from "./components/UI/AudioPlayer";
@@ -237,6 +239,11 @@ function App() {
     setShowNarration(false);
   };
 
+  const handleSkipIntro = () => {
+    setShowNarration(false);
+    setRomanticOpeningSeen();
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && selectedPlanet) {
@@ -308,6 +315,12 @@ function App() {
         </Canvas>
         {!showLanding && (
           <>
+            {shouldShowOpeningSequence && (
+              <>
+                <OpeningProgressBar duration={25000} />
+                <SkipIntroButton onSkip={handleSkipIntro} />
+              </>
+            )}
             {showNarration && (
               <NarrationOverlay onComplete={handleNarrationComplete} />
             )}
